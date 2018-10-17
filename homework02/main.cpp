@@ -61,7 +61,7 @@ public:
 private:
     int currentColumn;
 };
-
+//排序函数重载
 bool myCmp::operator()(const studData &d1, const studData &d2)
 {
     bool result = false;
@@ -92,17 +92,18 @@ class ScoreSorter
 {
 public:
     ScoreSorter(QString dataFile);
-    readFile();
-    doSort();
+    void readFile();
+    void doSort();
     QString tempFile;
     QList<studData> data;
     studData list;
-    inFile(quint8 lie);
+    void inFile(quint8 lie);
 };
 ScoreSorter::ScoreSorter(QString dataFile){
     tempFile=dataFile;
 }
-ScoreSorter::doSort()
+//排序
+void ScoreSorter::doSort()
 {
     for(int i=0;i<list.txt.size();i++)
     {
@@ -116,7 +117,8 @@ ScoreSorter::doSort()
         inFile(i+1);
     }
 }
-ScoreSorter::inFile(quint8 l)
+//文件的写入
+void ScoreSorter::inFile(quint8 l)
 {
     QFile file("sorted_"+tempFile);
     file.open(QIODevice::ReadWrite|QIODevice::Append);
@@ -136,7 +138,8 @@ ScoreSorter::inFile(quint8 l)
     in<<"-------------------------------------------------------"<<"\r\n\r\n";
     file.close();
 }
-ScoreSorter::readFile()
+//文件的读取
+void ScoreSorter::readFile()
 {
     QFile file(tempFile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -167,6 +170,7 @@ int main(int argc, char *argv[])
 {
     Q_UNUSED(argc)
     Q_UNUSED(argv)
+    //消除argc、argv警告
     //qInstallMessageHandler(myMessageOutput);
        QString datafile = "data.txt";
 
