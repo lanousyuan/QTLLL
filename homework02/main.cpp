@@ -43,22 +43,13 @@ enum SortKind{
 
 typedef struct{
     // 请补全结构定义
-public:
-    int number;
-    QString name;
-    int score1;
-    int score2;
-    int score3;
-    int score4;
-    int score5;
-    int score6;
+    QVector<QString> txt;
 } studData;
 
 QDebug operator<< (QDebug d, const studData &data) {
     // 请补全运算符重载函数，使其可以直接输出studData结构
-    qDebug("学号\t\t 姓名\t\t课程1\t课程2\t课程3\t课程4\t课程5\t课程6");
-    for(int i=0;i<46;i++)
-         qDebug()<<data.at(i).(studData.number)<<"\t"<<data.at(i).(studData.name)<<"\t"<<data.at(i).(studData.score1)<<"\t"<<data.at(i).(studData.score2)<<"\t"<<data.at(i).(studData.score3)<<"\t"<<data.at(i).(studData.score4)<<"\t"<<data.at(i).(studData.score5)<<"\t"<<data.at(i).(studData.score6);
+    for(int i=0;i<data.txt.size();i++)
+        d<<data.txt.at(i);
     qDebug("\n");
 
     return d;
@@ -79,6 +70,8 @@ bool myCmp::operator()(const studData &d1, const studData &d2)
     quint32 sortedColumn = 0x00000001<<currentColumn;
     switch (sortedColumn) {
     case SK::col01:
+        result=(d1.txt.at(currentColumn)>d2.txt.at(currentColumn));
+        break;
     // ...
     // 请补全运算符重载函数
     // ...
@@ -93,15 +86,27 @@ class ScoreSorter
 {
 public:
     ScoreSorter(QString dataFile);
+    readFile();
+    doSort();
+    QString tempFile;
+    QList<studData> tempdata;
     // ...
     // 请补全该类，使其实现上述要求
     // ...
-}
+};
 
 // 请补全
-ScoreSorter::ScoreSorter(QString dataFile){
+ScoreSorter::doSort()
+{
+    std::sort(tempdata.begin(),tempdata.end(),myCmp::operator());
 }
+ScoreSorter::ScoreSorter(QString dataFile){
+    tempFile=dataFile;
+}
+ScoreSorter::readFile()
+{
 
+}
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
