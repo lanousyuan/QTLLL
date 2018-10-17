@@ -42,16 +42,14 @@ enum SortKind{
 
 
 typedef struct{
-    // 请补全结构定义
-    QVector<QString> txt;
+    // 结构定义
+    QStringList txt;
 } studData;
 
 QDebug operator<< (QDebug d, const studData &data) {
-    // 请补全运算符重载函数，使其可以直接输出studData结构
+    // 直接输出studData结构
     for(int i=0;i<data.txt.size();i++)
-        d<<data.txt.at(i);
-    qDebug("\n");
-
+        d.noquote().nospace()<<QString(data.txt.at(i))<<"\t";
     return d;
 }
 
@@ -69,18 +67,26 @@ bool myCmp::operator()(const studData &d1, const studData &d2)
     bool result = false;
     quint32 sortedColumn = 0x00000001<<currentColumn;
     switch (sortedColumn) {
-    case SK::col01:
-        result=(d1.txt.at(currentColumn)>d2.txt.at(currentColumn));
-        break;
-    // ...
-    // 请补全运算符重载函数
-    // ...
-    //
+        case SK::col01:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col02:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col03:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col04:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col05:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col06:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col07:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col08:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col09:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col10:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col11:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col12:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col13:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col14:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col15:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+        case SK::col16:result=d1.txt.at(currentColumn)>=d2.txt.at(currentColumn);break;
+    default:break;
     }
     return result;
-
 }
-
 
 class ScoreSorter
 {
@@ -89,34 +95,79 @@ public:
     readFile();
     doSort();
     QString tempFile;
-    QList<studData> tempdata;
-    // ...
-    // 请补全该类，使其实现上述要求
-    // ...
+    QList<studData> data;
+    studData list;
+    inFile(quint8 lie);
 };
-
-// 请补全
-ScoreSorter::doSort()
-{
-    std::sort(tempdata.begin(),tempdata.end(),myCmp::operator());
-}
 ScoreSorter::ScoreSorter(QString dataFile){
     tempFile=dataFile;
 }
+ScoreSorter::doSort()
+{
+    for(int i=0;i<list.txt.size();i++)
+    {
+        myCmp no(i);
+        std::sort(data.begin(),data.end(),no);
+        qDebug()<<"排序后输出，当前排序第 "<<i+1<<" 列：";
+        qDebug()<<"    "<<list;
+        for(int j=0;j<data.size();j++)
+            qDebug()<<data.at(j);
+        qDebug()<<"-------------------------------------------------------\n";
+        inFile(i+1);
+    }
+}
+ScoreSorter::inFile(quint8 l)
+{
+    QFile file("sorted_"+tempFile);
+    file.open(QIODevice::ReadWrite|QIODevice::Append);
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+    in<<QString("排序后输出，当前排序第")<<l<<QString("列：")<<"\r\n";
+    in<<"\t";
+    for(int j=0;j<list.txt.size();j++)
+        in<<list.txt.at(j)<<"\t";
+    in<<"\r\n";
+    for(int i=0;i<data.size();i++)
+    {
+        for(int j=0;j<list.txt.size();j++)
+            in<<data.at(i).txt.at(j)<<"\t";
+        in<<"\r\n";
+    }
+    in<<"-------------------------------------------------------"<<"\r\n\r\n";
+    file.close();
+}
 ScoreSorter::readFile()
 {
-
+    QFile file(tempFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        qDebug()<<"文件打开失败!"<<endl;
+    QString f(file.readLine());
+    list.txt=f.split(" ", QString::SkipEmptyParts);
+    if((list.txt).last()=="\n")list.txt.removeLast();
+    studData datax;
+    while(!file.atEnd())
+    {
+        QByteArray line=file.readLine();
+        QString str(line);
+        datax.txt=str.split(" ", QString::SkipEmptyParts);
+        if((datax.txt).last()=="\n")
+            datax.txt.removeLast();
+        if(datax.txt.size()==0)
+            continue;
+        data.append(datax);
+    }
 }
 
-void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
+//void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+//{
     // 自定义qDebug
-}
+
+//}
 int main(int argc, char *argv[])
 {
     Q_UNUSED(argc)
     Q_UNUSED(argv)
-    qInstallMessageHandler(myMessageOutput);
+    //qInstallMessageHandler(myMessageOutput);
        QString datafile = "data.txt";
 
 
