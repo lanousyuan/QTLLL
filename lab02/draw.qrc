@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="draw">C:/Users/惠普/Desktop/th.jpg</file>
+    </qresource>
+</RCC>

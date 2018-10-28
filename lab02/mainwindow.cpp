@@ -72,7 +72,7 @@ void MainWindow::createToolBar ()
     clearBtn = new QToolButton;
     clearBtn->setText (tr("清除"));
     clearBtn->setToolTip(tr("清除当前画板"));
-    connect (clearBtn, &QToolButton::clicked, centerFrame, &CenterFrame::clearPaint);
+    connect (clearBtn, &QToolButton::clicked,centerFrame, &CenterFrame::clearPaint);
 
 
     // 向工具栏上添加各个控件

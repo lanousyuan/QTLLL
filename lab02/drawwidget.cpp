@@ -1,8 +1,11 @@
 #include "drawwidget.h"
+#include "centerframe.h"
 #include <QMouseEvent>
 #include <QPen>
 #include <QMessageBox>
-
+#include <QPainter>
+#include <QToolButton>
+#include <QPixmap>
 
 DrawWidget::DrawWidget(QWidget *parent) : QWidget(parent)
 {
@@ -114,6 +117,15 @@ void DrawWidget::clear ()
     update ();
 }
 
+void DrawWidget::draw()
+{
+    QImage image(":/draw");
+    QRect targetRect(100,0,400,400);
+    QRect sourceRect=image.rect();
+    QPainter painter(pix);
+    painter.drawImage(targetRect,image,sourceRect);
+    update ();
+}
 void DrawWidget::setShapeType(ST::ShapeType type)
 {
     drawType = type;
@@ -228,6 +240,19 @@ void DrawWidget::drawShape(const QPointF ptStart,const QPointF ptEnd,const ST::S
 
         // 画多边形
         painter.drawPolygon(points);
+    }
+        break;
+    case ST::Diamond:{
+        QPointF point11( (ptStart.x()+ptEnd.x())/2,ptStart.y());
+        QPointF point22( ptEnd.x(),(ptStart.y()+ptEnd.y())/2);
+        QPointF point33( (ptEnd.x()+ptStart.x())/2,ptEnd.y());
+        QPointF point44( ptStart.x(),(ptEnd.y()+ptStart.y())/2);
+
+        QVector<QPointF> points0;
+         points0<<point11<<point22<<point33<<point44;
+
+        // 画多边形
+        painter.drawPolygon(points0);
     }
         break;
     case ST::Text:{

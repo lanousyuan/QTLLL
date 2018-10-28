@@ -10,7 +10,7 @@ class DrawWidget;
 class QGroupBox;
 class QPushButton;
 class QLineEdit;
-
+class QToolButton;
 class CenterFrame : public QFrame
 {
     Q_OBJECT
@@ -40,7 +40,9 @@ protected slots:
     void on_btnEllipseClicked();
     void on_btnLineClicked();
     void on_btnTriangleClicked();
+    void on_btnDiamondClicked();
     void on_btnTextClicked();
+    void on_drawBtnClicked();
     void on_edtTextEdited(const QString &text);
 
 
@@ -53,9 +55,10 @@ private:
     QPushButton* btnEllipse;
     QPushButton* btnLine;
     QPushButton* btnTriangle;
+    QPushButton* btnDiamond;
     QPushButton* btnText;
     QLineEdit* edtText;
-
+    QToolButton *drawBtn;
 
 };
 

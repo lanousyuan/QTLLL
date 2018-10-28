@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QPushButton>
+#include <QToolButton>
 #include <QPainter>
 #include <QPixmap>
 #include <QGridLayout>
@@ -99,6 +100,27 @@ void CenterFrame::createUserCommandArea()
     connect(btnTriangle,&QPushButton::clicked,
             this,&CenterFrame::on_btnTriangleClicked);
 
+    //菱形
+    btnDiamond = new QPushButton(group);
+    btnDiamond->setToolTip("绘制菱形");
+    btnDiamond->setCheckable(true);
+    btnDiamond->setIconSize(p.size());
+
+    p.fill(BACKGROUND_COLOR);
+    //菱形的四个顶点
+    QPointF pt11(3,p.size().height()/2);
+    QPointF pt22(p.size().width()/2,p.size().height()-3);
+    QPointF pt33(p.size().width()-3,p.size().height()/2);
+    QPointF pt44(p.size().width()/2,3);
+    QVector<QPointF> pts0;
+    pts0<<pt11<<pt22<<pt22<<pt33<<pt33<<pt44<<pt44<<pt11;
+
+    painter.drawLines(pts0);
+    btnDiamond->setIcon (QIcon(p));
+    connect(btnDiamond,&QPushButton::clicked,
+            this,&CenterFrame::on_btnDiamondClicked);
+
+
     // 文本按钮
     btnText = new QPushButton(group);
     btnText->setToolTip("绘制文本");
@@ -115,6 +137,18 @@ void CenterFrame::createUserCommandArea()
     btnText->setIcon (QIcon(p));
     connect(btnText,&QPushButton::clicked,
             this,&CenterFrame::on_btnTextClicked);
+    //图片按钮
+    drawBtn = new QToolButton;
+    drawBtn->setToolTip("绘制图片");
+    drawBtn->setIconSize(p.size());
+    QImage image(":/draw");
+    p.fill (BACKGROUND_COLOR);
+    QRect targetRect(0,0,30,30);
+    QRect sourceRect=image.rect();
+    painter.drawImage(targetRect,image,sourceRect);
+    drawBtn->setIcon(QIcon(p));
+    connect (drawBtn, &QToolButton::clicked,this,&CenterFrame::on_drawBtnClicked);
+
 
     // 选项Group布局
      QGridLayout *gridLayout = new QGridLayout();
@@ -122,7 +156,9 @@ void CenterFrame::createUserCommandArea()
     gridLayout->addWidget(btnEllipse,0,1);
     gridLayout->addWidget(btnTriangle,1,0);
     gridLayout->addWidget(btnLine,1,1);
-    gridLayout->addWidget(btnText,2,0);
+    gridLayout->addWidget(btnText,3,0);
+    gridLayout->addWidget(btnDiamond,2,0);
+    gridLayout->addWidget(drawBtn,2,1);
     gridLayout->setMargin(3);
     gridLayout->setSpacing(3);
     group->setLayout(gridLayout);
@@ -195,6 +231,8 @@ void CenterFrame::updateButtonStatus()
     btnLine->setChecked(false);
     btnTriangle->setChecked(false);
     btnEllipse->setChecked(false);
+    btnDiamond->setChecked(false);
+    drawBtn->setChecked(false);
     btnText->setChecked(false);
     edtText->setVisible(false);
 
@@ -212,6 +250,12 @@ void CenterFrame::updateButtonStatus()
    case ST::Triangle:
         btnTriangle->setChecked(true);
         break;
+    case ST::Diamond:
+         btnDiamond->setChecked(true);
+         break;
+    case ST::Draw:
+         drawBtn->setChecked(true);
+         break;
     case ST::Text:
         btnText->setChecked(true);
         edtText->setVisible(true);      // 使编辑框可见
@@ -285,7 +329,22 @@ void CenterFrame::on_btnTriangleClicked()
         drawWidget->setShapeType(ST::None);
     }
 }
+void CenterFrame::on_btnDiamondClicked()
+{
+    if(btnDiamond->isChecked()){
+        drawWidget->setShapeType(ST::Diamond);
+        updateButtonStatus();
+    }else{
+        drawWidget->setShapeType(ST::None);
+    }
+}
 
+void CenterFrame::on_drawBtnClicked()
+{
+
+    drawWidget->draw();
+    updateButtonStatus();
+}
 void CenterFrame::on_btnTextClicked()
 {
 
