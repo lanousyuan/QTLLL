@@ -286,7 +286,10 @@ void CenterFrame::setPenColor(QColor color)
      drawWidget->clear();
 }
 
-
+ void CenterFrame::saveImage()
+{
+     drawWidget->savea();
+}
  void CenterFrame::on_btnRectClicked()
 {
     if(btnRect->isChecked()){

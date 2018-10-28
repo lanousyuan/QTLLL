@@ -6,6 +6,12 @@
 #include <QPainter>
 #include <QToolButton>
 #include <QPixmap>
+#include <QFileDialog>
+#include <QGuiApplication>
+#include <QImage>
+#include <QScreen>
+#include <QBuffer>
+
 
 DrawWidget::DrawWidget(QWidget *parent) : QWidget(parent)
 {
@@ -107,6 +113,11 @@ void DrawWidget::resizeEvent (QResizeEvent *event)
         pix = newPix;
     }
     QWidget::resizeEvent(event);
+}
+void DrawWidget::savea()
+{
+    pix->save("保存的图片.png");
+
 }
 
 

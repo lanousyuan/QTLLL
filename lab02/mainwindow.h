@@ -32,5 +32,6 @@ private:
     QToolButton *colorBtn;
     QToolButton *clearBtn;
     QToolButton *drawBtn;
+    QToolButton *saveBtn;
 };
 #endif // MAINWINDOW_H

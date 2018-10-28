@@ -36,6 +36,7 @@ signals:
     void setWidth(int);
     void setColor(QColor);
     void clear();
+    void savea();
     void draw();
 
 private :
